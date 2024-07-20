@@ -36,25 +36,50 @@ export class ProxyService {
 
   private modifyHtml(html: string, host: string): string {
     const $ = cheerio.load(html);
+
+    $('link').each((index, element) => {
+      const href = $(element).attr('href');
+      if (href && href.startsWith('/')) {
+        const newHref = `${this.targetUrl}${href}`;
+        $(element).attr('href', newHref);
+      }
+      if (href && href.startsWith('//')) {
+        const newHref = `https:${href}`;
+        $(element).attr('href', newHref);
+      }
+    });
+
+    $('script').each((index, element) => {
+      const href = $(element).attr('src');
+      if (href && href.startsWith('/')) {
+        const newHref = `${this.targetUrl}${href}`;
+        $(element).attr('src', newHref);
+      }
+      if (href && href.startsWith('//')) {
+        const newHref = `https:${href}`;
+        $(element).attr('src', newHref);
+      }
+    });
+
     $('body a').each((index, element) => {
       const href = $(element).attr('href');
       if (href && href.startsWith('/')) {
         const newHref = `${host}/api?url=${this.targetUrl}${href}`;
         $(element).attr('href', newHref);
       }
-    });
+    })
 
     let bodyHtml = $('body').html();
     const tempDiv = $('<div>').html(bodyHtml);
 
     tempDiv.contents().each(function () {
       if (this.type === 'text') {
-        const modifiedText = this.data.replace(/\b(\w{6})\b/g, '$1™');
+        const modifiedText = this.data.replace(/\b(\S{6})\b/g, '$1™');
         this.data = modifiedText;
       } else if (this.type === 'tag') {
         $(this).find('*').contents().each(function () {
           if (this.type === 'text') {
-            const modifiedText = this.data.replace(/\b(\w{6})\b/g, '$1™');
+            const modifiedText = this.data.replace(/\b(\S{6})\b/g, '$1™');
             this.data = modifiedText;
           }
         });
@@ -63,7 +88,6 @@ export class ProxyService {
 
     bodyHtml = tempDiv.html();
     $('body').html(bodyHtml);
-
     return $.html();
   }
 }
