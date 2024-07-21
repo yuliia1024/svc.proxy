@@ -25,6 +25,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^7.4.0",
     "@types/lodash": "^4.17.5",
+    "@types/xregexp": "^4.4.0",
     "axios": "^1.7.2",
     "cheerio": "^1.0.0-rc.12",
     "class-transformer": "^0.5.1",
@@ -32,7 +33,8 @@
     "dotenv": "^16.4.5",
     "lodash": "^4.17.21",
     "reflect-metadata": "^0.2.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "xregexp": "^5.1.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

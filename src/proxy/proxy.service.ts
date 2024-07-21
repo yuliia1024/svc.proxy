@@ -4,6 +4,7 @@ import { AxiosResponse } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import * as cheerio from 'cheerio';
 import { ConfigService } from "@nestjs/config";
+import constants from "../config/constants";
 
 @Injectable()
 export class ProxyService {
@@ -37,6 +38,7 @@ export class ProxyService {
   private modifyHtml(html: string, host: string): string {
     const $ = cheerio.load(html);
 
+    // Save styles:
     $('link').each((index, element) => {
       const href = $(element).attr('href');
       if (href && href.startsWith('/')) {
@@ -74,12 +76,12 @@ export class ProxyService {
 
     tempDiv.contents().each(function () {
       if (this.type === 'text') {
-        const modifiedText = this.data.replace(/\b(\S{6})\b/g, '$1™');
+        const modifiedText = this.data.replace(constants.regex, ' $1™');
         this.data = modifiedText;
       } else if (this.type === 'tag') {
         $(this).find('*').contents().each(function () {
           if (this.type === 'text') {
-            const modifiedText = this.data.replace(/\b(\S{6})\b/g, '$1™');
+            const modifiedText = this.data.replace(constants.regex, ' $1™');
             this.data = modifiedText;
           }
         });
