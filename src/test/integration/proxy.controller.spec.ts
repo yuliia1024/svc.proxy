@@ -27,7 +27,7 @@ describe('ProxyController (Integration)', () => {
                     <body>
                       <div>
                         <a href="/test">Link Module</a>
-                        <p>Example text with sixsix letters.</p>
+                        <p>Example тексту with sixsix letters.</p>
                       </div>
                     </body>
                   </html>
@@ -64,7 +64,7 @@ describe('ProxyController (Integration)', () => {
       .expect(HttpStatus.OK);
 
     expect(response.text).toContain('Link Module™');
-    expect(response.text).toContain('Example text with sixsix™ letters.');
+    expect(response.text).toContain('Example тексту™ with sixsix™ letters.');
   });
 
   afterAll(async () => {
